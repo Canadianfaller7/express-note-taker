@@ -1,24 +1,26 @@
-const noteRouter = require('express').Router();
+const notes = require('express').Router();
 const { readFromFile, readAndAppend, writeToFile } = require('../../helpers/fsUtils');
 const uuid = require('../../helpers/uuid');
 
-noteRouter.get('/', (req, res) => {
+notes.get('/', (req, res) => {
   console.info(`${req.method} request received for notes`);
+
   readFromFile('./db/db.json').then(data => res.json(JSON.parse(data)));
 });
 
-noteRouter.post('/', (req, res) => {
+notes.post('/', (req, res) => {
+  console.info(`${req.method} request received to update notes`);
 
   const { title, text } = req.body;
 
-  if(req.body) {
+  if(title && text) {
     const newNote = {
       title,
       text,
-      note_Id: uuid(),
+      id: uuid(),
     };
-    readAndAppend(newNote, './db/db.json');
 
+    readAndAppend(newNote, './db/db.json');
     const response = {
       status: 'success',
       body: newNote,
@@ -30,20 +32,24 @@ noteRouter.post('/', (req, res) => {
   }
 });
 
-noteRouter.delete('/:id', (req, res) => {
-  const noteID = req.params.id;
+notes.delete('/:id', (req, res) => {
+  console.info(`${req.method} request received to delete note`);
 
-  readFromFile('./db/db.json').then(data => {
-    let parsedData = JSON.parse(data);
+  const { id } = req.params;
 
-    let filteredNotes = parsedData.filter(item => item.note_Id !== noteID);
+  readFromFile('./db/db.json').then((data) => {
+    let parsedNotes = JSON.parse(data);
+
+    let filteredNotes = parsedNotes.filter(note => note.id !== id);
 
     return filteredNotes;
 
   }).then(response => {
+
     writeToFile('./db/db.json', response);
+
     res.json(response);
   });
 });
 
-module.exports = noteRouter;
+module.exports = notes;
