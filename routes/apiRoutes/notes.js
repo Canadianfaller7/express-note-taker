@@ -3,6 +3,7 @@ const { readFromFile, readAndAppend, writeToFile } = require('../../helpers/fsUt
 const uuid = require('../../helpers/uuid');
 
 noteRouter.get('/', (req, res) => {
+  console.info(`${req.method} request received for notes`);
   readFromFile('./db/db.json').then(data => res.json(JSON.parse(data)));
 });
 
@@ -35,8 +36,10 @@ noteRouter.delete('/:id', (req, res) => {
   readFromFile('./db/db.json').then(data => {
     let parsedData = JSON.parse(data);
 
-    let filtered = parsedData.filter(item => item.note_Id !== noteID);
-    return filtered;
+    let filteredNotes = parsedData.filter(item => item.note_Id !== noteID);
+
+    return filteredNotes;
+
   }).then(response => {
     writeToFile('./db/db.json', response);
     res.json(response);
