@@ -24,7 +24,7 @@ If your README is long, add a table of contents to make it easy for users to fin
 ## Usage
 - Run 'node server.js' in terminal and answer the questions to view the current data stored inside the tables or create new information!
 * [Note Taker Site](https://canadianfaller7-note-taker.herokuapp.com/ "Named link title")
-* [Note Taker](github.com/canadianfaller7/express-note-taker/ "Named link title")
+* [Note Taker](github.com/canadianfaller7/express-note-taker-/ "Named link title")
 
 ## Credits
 - N/A
